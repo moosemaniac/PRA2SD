@@ -148,7 +148,7 @@ public class TSAESessionOriginatorSide extends TimerTask{
 				if (msg.type() == MsgType.END_TSAE){
 					synchronized(serverData){
 						for(Operation op: ops){
-							serverData.addNewOperation(op);
+							serverData.executeOperation(op);
 						}
 						serverData.getSummary().updateMax(partnerSummary);
 						serverData.getAck().updateMax(partnerAck);

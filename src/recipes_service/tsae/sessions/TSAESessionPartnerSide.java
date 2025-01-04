@@ -121,7 +121,7 @@ public class TSAESessionPartnerSide extends Thread{
 					LSimLogger.log(Level.TRACE, "[TSAESessionPartnerSide] [session: "+current_session_number+"] sent message: "+ msg);
 					synchronized(serverData){
 						for(Operation op: ops){
-							serverData.addNewOperation(op);
+							serverData.executeOperation(op);
 						}
 						serverData.getSummary().updateMax(originatorSummary);
 						serverData.getAck().updateMax(originatorAck);
