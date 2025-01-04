@@ -226,7 +226,7 @@ public class ServerData {
 	// ******************************
 	// *** other
 	// ******************************
-	public synchronized addNewOperation(Operation op){
+	public synchronized void addNewOperation(Operation op){
 		if(log.add(op)){
 			recipes.add(((AddOperation)op).getRecipe());
 		}
