@@ -87,8 +87,12 @@ public class TSAESessionPartnerSide extends Thread{
 				}
 
 				// send to originator: local's summary and ack
-				TimestampVector localSummary = this.serverData.getSummary().clone();
+				TimestampVector localSummary;
 				TimestampMatrix localAck = null;
+				synchronized(serverData){
+					localSummary = serverData.getSummary().clone();
+					serverData.getAck().update(serverData.getId(), localSummary);
+				}
 				msg = new MessageAErequest(localSummary, localAck);
 				msg.setSessionNumber(current_session_number);
 	 	        out.writeObject(msg);
