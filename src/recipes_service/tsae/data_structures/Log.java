@@ -138,9 +138,9 @@ public class Log implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		return false;
+		Log other = (Log) obj;
+		return other.log.equals(log);
 	}
-
 	/**
 	 * toString
 	 */

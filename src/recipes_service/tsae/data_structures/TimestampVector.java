@@ -134,11 +134,17 @@ public class TimestampVector implements Serializable{
 	/**
 	 * equals
 	 */
-	public boolean equals(Object obj){
-		if(obj == null) return false;
-		if(this == obj) return true;
-		if(getClass() != obj.getClass()) return false;
-		return false;
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (obj == null || (getClass() != obj.getClass())) {
+			return false;
+		}
+
+		TimestampVector other = (TimestampVector) obj;
+		return timestampVector.equals(other.timestampVector);
 	}
 
 	/**
