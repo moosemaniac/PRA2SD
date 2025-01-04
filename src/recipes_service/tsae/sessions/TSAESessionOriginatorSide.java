@@ -99,10 +99,11 @@ public class TSAESessionOriginatorSide extends TimerTask{
 			ObjectOutputStream_DS out = new ObjectOutputStream_DS(socket.getOutputStream());
 			
 			TimestampVector localSummary;
-			TimestampMatrix localAck = null;
+			TimestampMatrix localAck;
 			synchronized(serverData){
 				localSummary = serverData.getSummary().clone();
 				serverData.getAck().update(serverData.getId(), localSummary);
+				localAck = serverData.getAck().clone();
 			}
 
 			// Send to partner: local's summary and ack
@@ -126,6 +127,7 @@ public class TSAESessionOriginatorSide extends TimerTask{
 			if (msg.type() == MsgType.AE_REQUEST){		
 				// send operations
 				TimestampVector partnerSummary = ((MessageAErequest)msg).getSummary();
+				TimestampMatrix partnerAck = ((MessageAErequest)msg).getAck();
 				List<Operation> operations = serverData.getLog().listNewer(partnerSummary);
 
 				for (Operation op: operations){
@@ -149,6 +151,7 @@ public class TSAESessionOriginatorSide extends TimerTask{
 							serverData.addNewOperation(op);
 						}
 						serverData.getSummary().updateMax(partnerSummary);
+						serverData.getAck().updateMax(partnerAck);
 					}
 				}
 
