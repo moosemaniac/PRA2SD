@@ -130,12 +130,12 @@ public class Log implements Serializable{
 
 		while(it.hasNext()){
 			String host = it.next();
-			TimestampVector tpVector = ack.getTimestampVector(host);
+			Timestamp tpVector = ack.minTimestampVector().getLast(host);
 			Iterator<Operation> opIt = log.get(host).iterator();
 
 			while(opIt.hasNext()){
 				Operation op = opIt.next();
-				if(op.getTimestamp().compare(tpVector.getLast(host)) <= 0){
+				if(op.getTimestamp().compare(tpVector) <= 0){
 					opIt.remove();
 				}
 			}
