@@ -45,7 +45,7 @@ public class Log implements Serializable{
 	// Only for the zip file with the correct solution of phase1.Needed for the logging system for the phase1. sgeag_2018p 
 //	private transient LSimCoordinator lsim = LSimFactory.getCoordinatorInstance();
 	// Needed for the logging system sgeag@2017
-	//private transient LSimWorker lsim = LSimFactory.getWorkerInstance();
+	private transient LSimWorker lsim = LSimFactory.getWorkerInstance();
 
 	private static final long serialVersionUID = -4864990265268259700L;
 	/**
@@ -73,8 +73,7 @@ public class Log implements Serializable{
 	 * @param op
 	 * @return true if op is inserted, false otherwise.
 	 */
-	public boolean add(Operation op){
-		// ....
+	public synchronized boolean add(Operation op){
 		List<Operation> hostLog = log.get(op.getTimestamp().getHostid());
 		if(hostLog.size() > 0) {
 			Operation lastOperation = hostLog.get(hostLog.size()-1);
@@ -97,8 +96,25 @@ public class Log implements Serializable{
 	 */
 	public List<Operation> listNewer(TimestampVector sum){
 
-		// return generated automatically. Remove it when implementing your solution 
-		return null;
+		List<Operation> optList = new Vector<Operation>();
+		List<String> participantes = new Vector<String>(this.log.keySet());
+		Iterator<String> parIt = participantes.iterator();
+		
+		while(parIt.hasNext()) {
+			String node = parIt.next();
+			List<Operation> opt = new Vector<Operation>(this.log.get(node));
+			Timestamp timestamp = sum.getLast(node);
+			
+			Iterator<Operation> opIt = opt.iterator();
+			while(opIt.hasNext()) {
+				Operation op = opIt.next();
+				if (op.getTimestamp().compare(timestamp) > 0) {
+					optList.add(op);
+				}
+			}
+		}
+		return optList;
+
 	}
 	
 	/**
