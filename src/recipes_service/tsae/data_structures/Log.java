@@ -25,6 +25,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -125,6 +126,22 @@ public class Log implements Serializable{
 	 * @param ack: ackSummary.
 	 */
 	public void purgeLog(TimestampMatrix ack){
+		Set<String> hosts = log.keySet();
+		Iterator<String> it = hosts.iterator();
+
+		while(it.hasNext()){
+			String host = it.next();
+			TimestampVector tpVector = ack.getTimestampVector(host);
+			Iterator<Operation> opIt = log.get(host).iterator();
+
+			while(opIt.hasNext()){
+				Operation op = opIt.next();
+				if(op.getTimestamp().compare(tpVector.getLast(host)) <= 0){
+					opIt.remove();
+				}
+			}
+
+		}
 	}
 
 	/**

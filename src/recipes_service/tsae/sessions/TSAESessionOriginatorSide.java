@@ -117,7 +117,6 @@ public class TSAESessionOriginatorSide extends TimerTask{
 			LSimLogger.log(Level.TRACE, "[TSAESessionOriginatorSide] [session: "+current_session_number+"] received message: "+msg);
 			while (msg.type() == MsgType.OPERATION){
 				Operation op = ((MessageOperation)msg).getOperation();
-				//serverData.getLog().add(op);
 				ops.add(op);
 				msg = (Message) in.readObject();
 				LSimLogger.log(Level.TRACE, "[TSAESessionOriginatorSide] [session: "+current_session_number+"] received message: "+msg);
