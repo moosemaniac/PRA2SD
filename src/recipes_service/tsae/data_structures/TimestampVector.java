@@ -75,7 +75,7 @@ public class TimestampVector implements Serializable{
 	 * merge in another vector, taking the elementwise maximum
 	 * @param tsVector (a timestamp vector)
 	 */
-	public void updateMax(TimestampVector tsVector){
+	public synchronized void updateMax(TimestampVector tsVector){
 		for (Iterator<String> it = tsVector.timestampVector.keySet().iterator(); it.hasNext();){
 			String key = it.next();
 			Timestamp t_1 = tsVector.timestampVector.get(key);
