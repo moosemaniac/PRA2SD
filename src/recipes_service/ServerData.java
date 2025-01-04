@@ -153,7 +153,13 @@ public class ServerData {
 	}
 	
 	public synchronized void removeRecipe(String recipeTitle){
-		System.err.println("Error: removeRecipe method (recipesService.serverData) not yet implemented");
+		Timestamp timestamp = nextTimestamp();
+        Recipe rcpe = recipes.get(recipeTitle);
+        Operation op = new RemoveOperation(recipeTitle, rcpe.getTimestamp(), timestamp);
+
+        log.add(op);
+        summary.updateTimestamp(timestamp);
+        recipes.remove(recipeTitle);
 	}
 	
 	private synchronized void purgeTombstones(){
