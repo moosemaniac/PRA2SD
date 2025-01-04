@@ -78,7 +78,7 @@ public class Log implements Serializable{
 		if(hostLog.size() > 0) {
 			Operation lastOperation = hostLog.get(hostLog.size()-1);
 			//We check if the timestamp of the last operation in log is newer than op. If it is, then we don't want to add it.
-			if(lastOperation.getTimestamp().compare(op.getTimestamp()) > 0) return false;
+			if(lastOperation.getTimestamp().compare(op.getTimestamp()) >= 0) return false;
 		}
 		//We add the operation to the log
 		hostLog.add(op);
