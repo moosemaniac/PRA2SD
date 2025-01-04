@@ -95,8 +95,7 @@ public class Log implements Serializable{
 	 * @param sum
 	 * @return list of operations
 	 */
-	public List<Operation> listNewer(TimestampVector sum){
-
+	public synchronized List<Operation> listNewer(TimestampVector sum){
 		List<Operation> optList = new Vector<Operation>();
 		List<String> participantes = new Vector<String>(this.log.keySet());
 		Iterator<String> parIt = participantes.iterator();
@@ -125,7 +124,7 @@ public class Log implements Serializable{
 	 * ackSummary. 
 	 * @param ack: ackSummary.
 	 */
-	public void purgeLog(TimestampMatrix ack){
+	public synchronized void purgeLog(TimestampMatrix ack){
 		Set<String> hosts = log.keySet();
 		Iterator<String> it = hosts.iterator();
 
