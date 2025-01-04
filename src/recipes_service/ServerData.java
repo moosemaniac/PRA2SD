@@ -226,7 +226,11 @@ public class ServerData {
 	// ******************************
 	// *** other
 	// ******************************
-	
+	public synchronized addNewOperation(Operation op){
+		if(log.add(op)){
+			recipes.add(((AddOperation)op).getRecipe());
+		}
+	}
 	public List<Host> getRandomPartners(int num){
 		return participants.getRandomPartners(num);
 	}

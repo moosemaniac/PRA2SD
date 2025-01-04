@@ -22,6 +22,7 @@ package recipes_service.tsae.sessions;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TimerTask;
@@ -111,11 +112,13 @@ public class TSAESessionOriginatorSide extends TimerTask{
 			LSimLogger.log(Level.TRACE, "[TSAESessionOriginatorSide] [session: "+current_session_number+"] sent message: "+msg);
 
             // receive operations from partner
+			List <Operation> operations = new ArrayList<Operation>();
 			msg = (Message) in.readObject();
 			LSimLogger.log(Level.TRACE, "[TSAESessionOriginatorSide] [session: "+current_session_number+"] received message: "+msg);
 			while (msg.type() == MsgType.OPERATION){
 				Operation op = ((MessageOperation)msg).getOperation();
-				serverData.getLog().add(op);
+				//serverData.getLog().add(op);
+				operations.add(op);
 				msg = (Message) in.readObject();
 				LSimLogger.log(Level.TRACE, "[TSAESessionOriginatorSide] [session: "+current_session_number+"] received message: "+msg);
 			}
@@ -142,7 +145,12 @@ public class TSAESessionOriginatorSide extends TimerTask{
 				msg = (Message) in.readObject();
 				LSimLogger.log(Level.TRACE, "[TSAESessionOriginatorSide] [session: "+current_session_number+"] received message: "+msg);
 				if (msg.type() == MsgType.END_TSAE){
-					serverData.getSummary().updateMax(partnerSummary);
+					synchronized(serverData){
+						for(op: operations){
+							serverData.addNewOperation(op);
+						}
+						serverData.getSummary().updateMax(partnerSummary);
+					}
 				}
 
 			}			
